@@ -15,7 +15,9 @@ function LoginPage() {
   const navigate = useNavigate()
 
   // Já logado? Não precisa ver o login
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />
   if (isAuthenticated) return <Navigate to="/produtos" replace />
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,6 +26,7 @@ function LoginPage() {
       setLoading(true)
       const resp = await authService.login({ email, senha })
       login(resp)
+      navigate('/dashboard')
       navigate('/produtos')
     } catch (err) {
       // sem resposta = a API não respondeu (desligada ou CORS)

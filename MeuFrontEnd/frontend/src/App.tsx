@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage'
 import ProdutoPage from './pages/ProdutoPage'
 import ClientePage from './pages/ClientePage'
 import VendaPage from './pages/VendaPage'
+import DashboardPage from './pages/DashboardPage'
 
 function Layout() {
   const { isAuthenticated } = useAuth()
@@ -25,6 +26,10 @@ function Layout() {
           } />
           <Route path="/vendas" element={
             <ProtectedRoute><VendaPage /></ProtectedRoute>
+          } />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute><DashboardPage /></ProtectedRoute>
           } />
         </Routes>
       </main>
