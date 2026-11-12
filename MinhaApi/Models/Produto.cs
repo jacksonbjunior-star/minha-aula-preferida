@@ -1,4 +1,5 @@
 namespace MinhaApi.Models;
+using System.Text.Json.Serialization;
 public class Produto
 {
     public int Id {get; set;}
@@ -13,4 +14,11 @@ public class Produto
     public bool Ativo {get; set;}
         = true;
 
-}
+    // Nome do arquivo em disco — NÃO enviado ao frontend
+    [JsonIgnore]
+    public string? Foto    { get; set; }
+
+    // Data URL calculada pelo Service — ENVIADA ao frontend
+    public string? FotoBase64 { get; set; } // ✨ NOVO
+}    
+

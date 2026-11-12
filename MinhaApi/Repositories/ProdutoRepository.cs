@@ -4,6 +4,7 @@ using MySqlConnector;
 public class ProdutoRepository : IProdutoRepository
 {
     private readonly string _connectionString;
+    
 
       public ProdutoRepository(IConfiguration config) 
       => _connectionString = config.GetConnectionString("DefaultConnection")!;
@@ -20,7 +21,7 @@ public class ProdutoRepository : IProdutoRepository
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        string sql = "SELECT id, nome, preco, estoque, ativo FROM produto";
+        string sql = "SELECT id, nome, preco, estoque, ativo, foto FROM produto";
         using var cmd = new MySqlCommand(sql, conn);
         using var reader = cmd.ExecuteReader();
 
@@ -32,7 +33,8 @@ public class ProdutoRepository : IProdutoRepository
                 Nome = reader.GetString("nome"),
                 Preco = reader.GetDecimal("preco"),
                 Estoque = reader.GetInt32("estoque"),
-                Ativo = reader.GetBoolean("ativo")
+                Ativo = reader.GetBoolean("ativo"),
+                Foto = reader["foto"] == DBNull.Value ? null : reader["foto"].ToString()
             });
         }
         return lista;
@@ -43,7 +45,7 @@ public class ProdutoRepository : IProdutoRepository
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        string sql = "SELECT id, nome, preco, estoque, ativo FROM produto WHERE id = @Id";
+        string sql = "SELECT id, nome, preco, estoque, ativo, foto FROM produto WHERE id = @Id";
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@Id", id);
         using var reader = cmd.ExecuteReader();
@@ -119,5 +121,18 @@ public class ProdutoRepository : IProdutoRepository
 
         cmd.ExecuteNonQuery();
     }
+
+    public void AtualizarFoto(int id, string? nomeArquivo)
+{
+    using var conn = new MySqlConnection(_connectionString);
+    conn.Open();
+    using var cmd = new MySqlCommand(
+        "UPDATE produtos SET foto = @Foto WHERE id = @Id", conn);
+
+    cmd.Parameters.AddWithValue("@Foto",
+        (object?)nomeArquivo ?? DBNull.Value); // null → NULL no banco
+    cmd.Parameters.AddWithValue("@Id", id);
+    cmd.ExecuteNonQuery();
+}
 
 }

@@ -11,4 +11,7 @@ public interface IProdutoRepository
     void Delete(int id);
 
     void AtualizarEstoque(int id, int quantidade);
+    
+    // Adicionar ao final da interface existente:
+    void AtualizarFoto(int id, string? nomeArquivo);
 }

@@ -427,3 +427,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Não commitar as fotos do uploads/produtos
+uploads/produtos/*
+!uploads/produtos/.gitkeep
