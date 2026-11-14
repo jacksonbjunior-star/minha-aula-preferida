@@ -69,6 +69,7 @@ builder.Services.AddScoped<
 // Adicionar junto com os outros services:
 builder.Services.AddScoped<IFotoService, FotoService>(); // ✨
 
+
 // NÃO é necessário UseStaticFiles()!
 // As imagens chegam ao frontend via JSON (base64),
 // não como arquivos servidos pela URL.    

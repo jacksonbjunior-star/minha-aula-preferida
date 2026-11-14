@@ -10,7 +10,7 @@ private readonly IFotoService _fotoService; // ✨ novo
 
   public ProdutoService(IProdutoRepository repo, IFotoService fotoService)
   {
-      => _repo = repo;
+      _repo = repo;
       _fotoService = fotoService;
   }
   public IEnumerable<Produto> GetAll()
@@ -20,7 +20,7 @@ private readonly IFotoService _fotoService; // ✨ novo
           foreach (var p in produtos)
             p.FotoBase64 = _fotoService.LerBase64(p.Foto);
     
-        return produtos
+        return produtos;
     }
 
   public Produto? GetById(int id)
