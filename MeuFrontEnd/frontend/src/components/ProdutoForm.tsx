@@ -1,16 +1,42 @@
-import { useState } from 'react'
-import { ProdutoService } from '../services/produtoService'
+import { useEffect, useState } from 'react'
+import { ProdutoService } from '../services/ProdutoService'
+import FotoUpload from '../components/produtos/FotoUpload'
+import { useParams } from 'react-router-dom'
+
 
 interface Props {
   onProdutoCriado: () => void
 }
 
 function ProdutoForm({ onProdutoCriado }: Props) {
+
+   const { id } = useParams()
+  const modoEdicao = !!id
+
   const [nome,    setNome]    = useState('')
   const [preco,   setPreco]   = useState('')
   const [estoque, setEstoque] = useState('')
   const [loading, setLoading] = useState(false)
   const [erro,    setErro]    = useState<string | null>(null)
+  const [fotoBase64Atual, setFotoBase64Atual] =
+  useState<string | null>(null);
+
+  async function carregarProduto() {
+  if (!id) return
+  const produto = await ProdutoService.GetById(Number(id))
+  setNome(String(produto.nome))
+  setPreco(String(produto.preco))
+  setEstoque(String(produto.estoque))
+  // ✨ Guardar a data URL que veio da API:
+  setFotoBase64Atual(produto.fotoBase64 ?? null)
+}
+
+  // 3️⃣ EFEITO QUE DISPARA O CARREGAMENTO (PASSO 2)
+  useEffect(() => {
+    if (modoEdicao) {
+      carregarProduto()
+    }
+  }, [id])  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,6 +59,7 @@ function ProdutoForm({ onProdutoCriado }: Props) {
       setLoading(false)
     }
   }
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -124,9 +151,17 @@ function ProdutoForm({ onProdutoCriado }: Props) {
         }}
       >
         {loading ? 'Salvando...' : 'Cadastrar'}
+      {modoEdicao && (
+    <FotoUpload
+      produtoId={Number(id)}
+      fotoBase64Atual={fotoBase64Atual}
+      onAtualizar={carregarProduto}
+      />
+    )}  
       </button>
     </form>
   )
+  
 }
 
 export default ProdutoForm

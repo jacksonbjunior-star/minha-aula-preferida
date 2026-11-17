@@ -8,7 +8,7 @@ export interface Produto {
   preco: number
   estoque: number
   ativo: boolean
-  fotoBase64?: string  
+  fotoBase64?: string | null
 }
 
 // Tipo para criação — sem o id (gerado pela MinhaAPI)

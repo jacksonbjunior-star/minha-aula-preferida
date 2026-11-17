@@ -22,6 +22,11 @@ export const ProdutoService = {
   excluir: async (id: number): Promise<void> => {
     await api.delete(`/produto/${id}`)
   },
+
+  GetById: async (id: number): Promise<Produto> => {
+  const { data } = await api.get(`/produto/${id}`)
+  return data
+},
   
   uploadFoto: async (id: number, arquivo: File): Promise<string> => {
   const formData = new FormData()
